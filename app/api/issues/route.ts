@@ -5,8 +5,8 @@ import { jsxs } from "react/jsx-runtime";
 import { error } from "console";
 
 const createIssueSchema = z.object({
-        title: z.string().min(1).max(255),
-        description: z.string().min(1)
+    title: z.string().min(1, 'Title is required.').max(255),
+    description: z.string().min(1, 'Description is required')
 });
 
 export async function GET(request: NextRequest){
