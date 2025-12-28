@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body>
-        <Theme appearance='light' accentColor="jade">
+        <Theme appearance='dark' accentColor="jade">
           <NavBar />
           <main className="p-5">{children}</main>
         </Theme>
