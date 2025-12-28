@@ -2,20 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/client";
 import { validationSchema } from "@/app/validationSchema";
 
-export async function GET(request: NextRequest){
+export async function GET(request: NextRequest) {
     const issues = prisma.issue.findMany();
-    return NextResponse.json(issues, {status: 200});
+    return NextResponse.json(issues, { status: 200 });
 }
 
-export async function POST(request: NextRequest){
+export async function POST(request: NextRequest) {
     // Get the request body
     const body = await request.json();
 
     // Validate the request
     const validation = validationSchema.safeParse(body);
 
-    if(!validation.success){
-        return NextResponse.json(validation.error.issues, {status: 400});
+    if (!validation.success) {
+        return NextResponse.json(validation.error.issues, { status: 400 });
     }
 
     // Create the new issue object
@@ -26,5 +26,5 @@ export async function POST(request: NextRequest){
         }
     });
 
-    return NextResponse.json(newIssue, {status: 201});
+    return NextResponse.json(newIssue, { status: 201 });
 }
