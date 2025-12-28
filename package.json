@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@mdxeditor/editor": "^3.52.3",
     "@milkdown/crepe": "^7.17.3",
     "@prisma/adapter-mariadb": "^7.2.0",
