@@ -4,17 +4,17 @@ import { Link as RadixLink } from '@radix-ui/themes'
 
 interface Props {
     href: string;
-    children: string;
+    children: React.ReactNode;
 }   
 
 const Link = ({ href, children } : Props) => {
   return (
-    <NextLink href={href}>
-        <RadixLink>
+    <RadixLink asChild>
+        <NextLink href={href}>
             {children}
-        </RadixLink>
-    </NextLink>
-  )
+        </NextLink>
+    </RadixLink>
+  );
 }
 
 export default Link
