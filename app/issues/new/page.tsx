@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import axios from 'axios'
 import { validationSchema } from '@/app/validationSchema'
 import { TextField, TextArea, Button, Callout, Spinner } from '@radix-ui/themes'
@@ -12,6 +11,7 @@ import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from "rehype-sanitize";
+import delay from 'delay'
 
 type IssueForm = z.infer<typeof validationSchema>;
 
@@ -50,8 +50,7 @@ const NewIssuePage = () => {
         className='space-y-3'
         onSubmit={onSubmit}
       >
-        <TextField.Root placeholder='Title' radius='medium' {...register('title')}>
-        </TextField.Root>
+        <TextField.Root placeholder='Title' radius='medium' {...register('title')}></TextField.Root>
         <ErrorMessage>
           {errors.title?.message}
         </ErrorMessage>
