@@ -1,17 +1,22 @@
 'use client'
-import axios from 'axios'
+
+import { Button, Callout, Spinner, TextField } from '@radix-ui/themes'
+import { Controller, useForm } from 'react-hook-form'
 import { validationSchema } from '@/app/validationSchema'
-import { TextField, TextArea, Button, Callout, Spinner } from '@radix-ui/themes'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
-import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import axios from 'axios'
 import ErrorMessage from '@/app/components/ErrorMessage'
-import MDEditor from '@uiw/react-md-editor';
-import rehypeSanitize from "rehype-sanitize";
-import delay from 'delay'
+import rehypeSanitize from "rehype-sanitize"
+import dynamic from 'next/dynamic'
+
+const MDEditor = dynamic(
+  () => import('@uiw/react-md-editor'),
+  { ssr: false }
+)
 
 type IssueForm = z.infer<typeof validationSchema>;
 
