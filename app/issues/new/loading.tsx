@@ -1,4 +1,4 @@
-import { Skeleton, Box, Flex, Button } from '@radix-ui/themes';
+import { Box, Flex, Skeleton } from '@radix-ui/themes';
 
 const LoadingNewIssuePage = () => {
   return (
