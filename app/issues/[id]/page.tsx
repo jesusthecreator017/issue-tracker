@@ -2,7 +2,8 @@ import IssueStatusBadge from '@/app/components/IssueStatusBadge';
 import { prisma } from '@/prisma/client'
 import { Card, Flex, Heading, Text } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
-import React from 'react'
+import ReactMarkdown from 'react-markdown'
+import rehypeSanitize from 'rehype-sanitize';
 
 interface Props {
     params: { id: string }
@@ -26,8 +27,8 @@ const IssueDetailPage = async ({ params }: Props) => {
                 <IssueStatusBadge status={currIssue.status} />
                 <Text>{currIssue.createdAt.toDateString()}</Text>
             </Flex>
-            <Card>
-                <p>{currIssue.description}</p>
+            <Card className='prose prose-slate dark:prose-invert mt-4'>
+                <ReactMarkdown rehypePlugins={[[rehypeSanitize]]}>{currIssue.description}</ReactMarkdown>
             </Card>
         </div>
     )

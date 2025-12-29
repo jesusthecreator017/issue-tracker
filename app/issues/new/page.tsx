@@ -10,7 +10,8 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
-import { is } from 'zod/v4/locales'
+import MDEditor from '@uiw/react-md-editor';
+import rehypeSanitize from "rehype-sanitize";
 
 type IssueForm = z.infer<typeof validationSchema>;
 
@@ -54,7 +55,7 @@ const NewIssuePage = () => {
         <ErrorMessage>
           {errors.title?.message}
         </ErrorMessage>
-        <Controller name='description' control={control} render={({ field }) => <TextArea placeholder='Description'{...field} />} />
+        <Controller name='description' control={control} render={({ field }) => <MDEditor height={600} aria-placeholder='Description' previewOptions={{rehypePlugins: [[rehypeSanitize]]}}{...field}/>} />
         <ErrorMessage>
           {errors.description?.message}
         </ErrorMessage>
