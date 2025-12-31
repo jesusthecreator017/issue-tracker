@@ -12,7 +12,7 @@ const IssueDetails = ({ issue }: { issue: Issue }) => {
                 <IssueStatusBadge status={issue.status} />
                 <Text>{issue.createdAt.toDateString()}</Text>
             </Flex>
-            <Card className='prose prose-slate dark:prose-invert mt-4'>
+            <Card className='prose prose-slate dark:prose-invert mt-4 max-w-full' mt='4'>
                 <ReactMarkdown rehypePlugins={[[rehypeSanitize]]}>{issue.description}</ReactMarkdown>
             </Card>
         </>
