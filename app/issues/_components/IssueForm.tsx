@@ -1,23 +1,18 @@
 'use client'
-
 import { ErrorMessage } from '@/app/components'
 import { issueSchema } from '@/app/validationSchema'
+import { Issue } from '@/generated/prisma/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { Button, Callout, Spinner, TextField } from '@radix-ui/themes'
+import MDEditor from '@uiw/react-md-editor'
 import axios from 'axios'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import rehypeSanitize from "rehype-sanitize"
 import { z } from 'zod'
-import { Issue } from '@/generated/prisma/client'
 
-const MDEditor = dynamic(
-  () => import('@uiw/react-md-editor'),
-  { ssr: false }
-)
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
@@ -38,7 +33,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         await axios.post('/api/issues', data);
       }
       router.push('/issues');
-      router.refresh();
+      router.refresh()
     } catch (error) {
       setSubmitting(false);
       setError('An unexpected error occured');
