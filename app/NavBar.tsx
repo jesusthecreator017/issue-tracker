@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import Link from 'next/link'
 import { IoBugSharp } from "react-icons/io5";
 import { usePathname } from 'next/navigation';
@@ -11,6 +10,7 @@ const NavBar = () => {
     const links = [
         { label: 'Dashboard', href: '/'},
         { label: 'Issues', href: '/issues'},
+        
     ]
 
   return (
