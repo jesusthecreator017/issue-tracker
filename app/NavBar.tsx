@@ -1,8 +1,8 @@
 'use client'
-import Link from 'next/link'
+import Link from 'next/link';
 import { IoBugSharp } from "react-icons/io5";
 import { usePathname } from 'next/navigation';
-import classnames from 'classnames';
+import { Button, TabNav, Flex } from '@radix-ui/themes';
 
 const NavBar = () => {
     const currentPath = usePathname();
@@ -10,23 +10,18 @@ const NavBar = () => {
     const links = [
         { label: 'Dashboard', href: '/'},
         { label: 'Issues', href: '/issues'},
-        
     ]
 
   return (
     <nav className='flex space-x-6 border-b mb-5 px-5 h-14 items-center'>
         <Link href='/'><IoBugSharp /></Link>
-        <ul className='flex space-x-6'>
-            {links.map( (link) =>  <Link 
-                key={link.href} 
-                className={classnames({
-                    'text-jade-400': link.href === currentPath,
-                    'text-jade-100': link.href !== currentPath,
-                    'hover:text-jade-300 transition-colors': true,
-                })}
-                href={link.href}> {link.label} </Link>)
-            }
-        </ul>
+        <TabNav.Root color='jade'>
+            {links.map((link) => (
+                <TabNav.Link key={link.href} href={link.href} active={currentPath === link.href || currentPath.startsWith(link.href + '/')}>
+                    {link.label}
+                </TabNav.Link>
+            ))}
+        </TabNav.Root>
     </nav>
   );
 }

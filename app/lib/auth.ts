@@ -4,13 +4,14 @@ import { prisma } from '@/prisma/client';
 import { nextCookies } from 'better-auth/next-js';
 
 export const auth = betterAuth({
-    
-    database: prismaAdapter(prisma, {
-        provider: 'mysql'
-    }),
-
     emailAndPassword: {
         enabled: true
+    },
+    session: {
+        cookieCache: {
+            enabled: true,
+            maxSize: 60 // 1 minutes
+        },
     },
     /*
     socialProviders: {
@@ -21,6 +22,10 @@ export const auth = betterAuth({
     },
     */
    plugins: [nextCookies()],
+   
+   database: prismaAdapter(prisma, {
+        provider: 'mysql'
+    }),
 });
 
 
