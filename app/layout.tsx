@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import NavBar from "./NavBar";
 import { Container, Theme, ThemePanel } from '@radix-ui/themes'
+import { Toaster } from 'sonner'
 
 
 const inter = Inter({
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body>
         <Theme appearance='dark' accentColor="jade">
+          <Toaster position="bottom-right" theme="dark" richColors />
           <NavBar />
           <main className="p-5">
             <Container>

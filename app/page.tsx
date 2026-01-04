@@ -1,30 +1,23 @@
-import Link from 'next/link';
-import { auth } from './lib/auth';
-import { headers } from 'next/headers';
-import { Button } from '@radix-ui/themes';
-import { PersonIcon } from '@radix-ui/react-icons';
+'use client';
+import { authClient } from './lib/auth-client';
 
-export default async function Home() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+export default function Home() {
+  const { data: session, isPending: loading } = authClient.useSession();
 
-  if(!session){
-    return (
-      <div>
-        <Button asChild>
-          <Link href='/auth/signup'>
-            <PersonIcon />
-            Sign Up
-          </Link>
-        </Button>
-      </div>
-    );
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      Hello World!
+    <div className='my-6 px-4 max-w-md mx-auto'>
+      <div className='text-center space-y-6'>
+        <h1 className='text-2xl font-bold'>
+          {session ? `Hello, ${session.user?.name || 'User'}!` : 'Welcome to our App'}
+        </h1>
+        {!session && (
+          <p className='text-gray-500'>Sign in to get started</p>
+        )}
+      </div>
     </div>
   );
 }

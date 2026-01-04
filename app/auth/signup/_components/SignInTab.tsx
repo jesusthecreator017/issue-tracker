@@ -8,6 +8,8 @@ import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { Button, TextField, IconButton, Text } from '@radix-ui/themes';
 import { ErrorMessage } from '@/app/components';
 import { signInSchema } from './userSchema';
+import { authClient } from '@/app/lib/auth-client';
+import { toast } from 'sonner';
 
 type SignInForm = z.infer<typeof signInSchema>;
 
@@ -21,8 +23,26 @@ const SignInTab = () => {
     },
   });
 
-  const onSubmit = async (data: SignInForm) => {
-    console.log(data);
+  const onSubmit = async (formData: SignInForm) => {
+    const { data, error } = await authClient.signIn.email(
+      {
+        ...formData,
+        callbackURL: '/',
+      });
+    
+      if(error){
+        toast.error('Sign In Failed', {
+          description: error.message || 'An error occurred during sign in. Please try again.',
+        });
+        return;
+      }
+
+      if(data){
+        toast.success('Signed In!', {
+          description: 'You have signed in successfully.',
+        });
+      }
+
   }
 
   return (

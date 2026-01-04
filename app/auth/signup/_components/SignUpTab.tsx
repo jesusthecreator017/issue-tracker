@@ -2,16 +2,20 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { Form } from "radix-ui";
 import z from 'zod';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { Button, TextField, IconButton, Text } from '@radix-ui/themes';
 import { ErrorMessage } from '@/app/components';
 import { signUpSchema } from './userSchema';
+import { authClient } from '@/app/lib/auth-client';
+import { toast } from 'sonner';
 
 type SignUpForm = z.infer<typeof signUpSchema>;
 
 const SignUpTab = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignUpForm>({
     resolver: zodResolver(signUpSchema),
@@ -22,8 +26,24 @@ const SignUpTab = () => {
     },
   });
 
-  const onSubmit = async (data: SignUpForm) => {
-    console.log(data);
+  const onSubmit = async (formData: SignUpForm) => {
+    const { data, error } = await authClient.signUp.email({
+      ...formData,
+      callbackURL: '/'
+    });
+
+    if (error) {
+      toast.error('Sign Up Failed', {
+        description: error.message || 'An error occurred during sign up. Please try again.',
+      });
+      return;
+    }
+
+    if (data) {
+      toast.success('Account Created!', {
+        description: 'Your account has been created successfully.',
+      });
+    }
   }
 
   return (
