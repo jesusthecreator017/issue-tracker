@@ -29,7 +29,7 @@ const SignUpTab = () => {
   const onSubmit = async (formData: SignUpForm) => {
     const { data, error } = await authClient.signUp.email({
       ...formData,
-      callbackURL: '/'
+      callbackURL: '/',
     });
 
     if (error) {
@@ -43,6 +43,7 @@ const SignUpTab = () => {
       toast.success('Account Created!', {
         description: 'Your account has been created successfully.',
       });
+      router.push('/');
     }
   }
 

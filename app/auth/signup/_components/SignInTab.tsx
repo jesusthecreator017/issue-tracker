@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { Form } from "radix-ui";
 import z from 'zod';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
@@ -14,6 +15,7 @@ import { toast } from 'sonner';
 type SignInForm = z.infer<typeof signInSchema>;
 
 const SignInTab = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignInForm>({
     resolver: zodResolver(signInSchema),
@@ -24,25 +26,24 @@ const SignInTab = () => {
   });
 
   const onSubmit = async (formData: SignInForm) => {
-    const { data, error } = await authClient.signIn.email(
-      {
-        ...formData,
-        callbackURL: '/',
+    const { data, error } = await authClient.signIn.email({
+      ...formData,
+      callbackURL: '/',
+    });
+
+    if (error) {
+      toast.error('Sign In Failed', {
+        description: error.message || 'An error occurred during sign in. Please try again.',
       });
-    
-      if(error){
-        toast.error('Sign In Failed', {
-          description: error.message || 'An error occurred during sign in. Please try again.',
-        });
-        return;
-      }
+      return;
+    }
 
-      if(data){
-        toast.success('Signed In!', {
-          description: 'You have signed in successfully.',
-        });
-      }
-
+    if (data) {
+      toast.success('Signed In!', {
+        description: 'You have signed in successfully.',
+      });
+      router.push('/');
+    }
   }
 
   return (
