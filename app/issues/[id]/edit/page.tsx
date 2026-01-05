@@ -2,7 +2,6 @@ import { prisma } from '@/prisma/client'
 import { Flex } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
 import IssueFormClient from '../../_components/IssueFormClient'
-import StatusSelect from '../../_components/StatusSelect'
 
 interface Props {
   params: { id: string }
