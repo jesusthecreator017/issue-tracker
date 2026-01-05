@@ -18,7 +18,7 @@ export async function PATCH(
     }
 
     // Destruct the body properties
-    const { assignedToUserId, title, description } = body;
+    const { assignedToUserId, title, description, status } = body;
 
     // If there is a assignedToUserId find if it exists
     if(assignedToUserId){
@@ -45,6 +45,7 @@ export async function PATCH(
         data: {
             title,
             description,
+            status,
             assignedToUserId, 
         }
     });

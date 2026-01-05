@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Routes that require authentication
 const protectedRoutes = [
-    '/issues',
-    '/issues/new',
-    '/issues/edit',
+    '/issues/list',
+    '/issues/list/new',
+    '/issues/list/edit',
 ];
 
 // API routes that require authentication (for non-GET requests)
 const protectedApiRoutes = [
+    //'',
     '/api/issues',
 ];
 
@@ -52,9 +53,9 @@ export async function proxy(request: NextRequest) {
 export const config = {
     matcher: [
         // Protected pages
-        '/issues',
-        '/issues/new',
-        '/issues/:id/edit',
+        '/issues/list',
+        '/issues/list/new',
+        '/issues/list/:id/edit',
         // Protected API routes
         '/api/issues/:path*',
     ],

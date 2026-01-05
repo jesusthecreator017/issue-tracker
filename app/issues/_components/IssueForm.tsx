@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import rehypeSanitize from "rehype-sanitize"
 import { z } from 'zod'
-
+import StatusSelect from './StatusSelect'
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
@@ -64,6 +64,11 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         <ErrorMessage>
           {errors.description?.message}
         </ErrorMessage>
+        {issue && (
+          <div>
+            <StatusSelect issue={issue} />
+          </div>
+        )}
         <Button disabled={isSubmitting}>
           {isSubmitting && <Spinner />}{issue ? 'Update Issue' : 'Submit New Issue'}{' '}
         </Button>

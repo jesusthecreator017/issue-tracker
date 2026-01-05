@@ -5,7 +5,6 @@ import EditIssueButton from './EditIssueButton';
 import IssueDetails from './IssueDetails';
 import DeleteIssueButton from './delete/DeleteIssueButton';
 import AssigneeSelect from './AssigneeSelect';
-import { issue } from '@uiw/react-md-editor';
 
 interface Props {
     params: { id: string }
@@ -21,15 +20,15 @@ const IssueDetailPage = async ({ params }: Props) => {
     if (!currIssue) {
         notFound();
     }
-1
+
     return (
         <Grid columns={{ initial: '1', sm: '5' }} gap='5'>
             <Box className='md:col-span-4'>
-                <IssueDetails issue={ currIssue } />
+                <IssueDetails issue={currIssue} />
             </Box>
             <Box>
                 <Flex direction='column' gap='1rem'>
-                    <AssigneeSelect issue={currIssue}/>
+                    <AssigneeSelect issue={currIssue} />
                     <EditIssueButton issueId={currIssue.id} />
                     <DeleteIssueButton issueId={currIssue.id} />
                 </Flex>
