@@ -17,7 +17,10 @@ export async function PATCH(
         return NextResponse.json(validation.error.issues, { status: 400 });
     }
 
+    // Destruct the body properties
     const { assignedToUserId, title, description } = body;
+
+    // If there is a assignedToUserId find if it exists
     if(assignedToUserId){
         const user = await prisma.user.findUnique({
             where: { id: assignedToUserId }
