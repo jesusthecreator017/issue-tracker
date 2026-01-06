@@ -4,38 +4,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an Issue Tracker application built with Next.js 16, using the App Router architecture. The application allows users to create, view, edit, and delete issues, with authentication powered by BetterAuth.
+Issue Tracker application built with Next.js 16 (App Router). Users can create, view, edit, delete, and assign issues to users. Authentication powered by BetterAuth.
 
 ## Development Commands
 
 ```bash
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Run linter
-npm run lint
+npm run dev          # Start development server
+npm run build        # Build for production
+npm start            # Start production server
+npm run lint         # Run ESLint
 ```
 
 ## Database Commands
 
 ```bash
-# Generate Prisma Client (after schema changes)
-npx prisma generate
-
-# Create and apply migrations
-npx prisma migrate dev --name <migration_name>
-
-# Open Prisma Studio to view/edit data
-npx prisma studio
-
-# Reset database (WARNING: deletes all data)
-npx prisma migrate reset
+npx prisma generate                        # Generate Prisma Client (after schema changes)
+npx prisma migrate dev --name <name>       # Create and apply migrations
+npx prisma studio                          # Open Prisma Studio to view/edit data
+npx prisma migrate reset                   # Reset database (WARNING: deletes all data)
 ```
 
 ## Architecture
@@ -43,127 +29,96 @@ npx prisma migrate reset
 ### Database Layer
 
 - **ORM**: Prisma with MariaDB adapter
-- **Database**: MySQL/MariaDB running on localhost:3306
-- **Client Location**: Generated client is in `generated/prisma/client` (custom output path)
-- **Schema**: Located at `prisma/schema.prisma`
-- **Client Instance**: Singleton pattern in `prisma/client.ts` with connection pooling (limit: 5)
+- **Client Location**: `generated/prisma` (custom output path configured in schema)
+- **Client Instance**: Singleton pattern in `prisma/client.ts`
 - **Models**:
-  - `Issue`: Core issue tracking (title, description, status, timestamps)
+  - `Issue`: title, description, status (OPEN/IN_PROGRESS/CLOSED), assignedToUserId (optional FK to User)
   - `User`, `Session`, `Account`, `Verification`: BetterAuth authentication tables
 
 ### Authentication
 
-- **Provider**: BetterAuth v1.4.10
-- **Strategy**: Email/password authentication (social providers commented out)
+- **Provider**: BetterAuth
 - **Configuration**: `app/lib/auth.ts` (server-side), `app/lib/auth-client.ts` (client-side)
-- **API Route**: All auth requests handled by `app/api/auth/[...all]/route.ts`
-- **Session**: Cookie-based with 1-minute cache enabled
-- **Database Adapter**: Prisma adapter with MySQL provider
+- **API Route**: `app/api/auth/[...all]/route.ts`
 
-### API Routes (App Router)
+### API Routes
 
 - `app/api/issues/route.ts`: GET (list all), POST (create)
-- `app/api/issues/[id]/route.ts`: PATCH (update), DELETE (delete)
+- `app/api/issues/[id]/route.ts`: PATCH (update status, title, description, assignee), DELETE
+- `app/api/users/route.ts`: GET (list all users for assignment dropdown)
 - `app/api/auth/[...all]/route.ts`: BetterAuth handlers
 
 ### Validation
 
-- **Library**: Zod v4.2.1
-- **Schema**: Shared schema at `app/validationSchema.ts`
-- **Usage**: Both client-side (react-hook-form with zodResolver) and server-side (API routes)
+- **Library**: Zod
+- **Schemas** in `app/validationSchema.ts`:
+  - `issueSchema`: For creating issues (title, description required)
+  - `patchIssueSchema`: For updates (all fields optional, includes status and assignedToUserId)
+  - `IssueStatus` enum: TypeScript enum mirroring Prisma's Status enum
 
-### UI Components
+### UI Stack
 
-- **Component Library**: Radix UI Themes v3.2.1
+- **Component Library**: Radix UI Themes
 - **Styling**: Tailwind CSS v4
-- **Icons**: Radix Icons
-- **Markdown Editor**: `@uiw/react-md-editor` with rehype-sanitize for XSS protection
+- **Markdown Editor**: `@uiw/react-md-editor` with rehype-sanitize
 - **Forms**: react-hook-form with Zod resolver
+- **Data Fetching**: TanStack Query for client-side data fetching (e.g., AssigneeSelect)
+- **Notifications**: Sonner for toast notifications
 
-### File Structure Patterns
+### Key Components
 
-```
-app/
-├── issues/
-│   ├── [id]/                    # Dynamic route for individual issues
-│   │   ├── page.tsx             # Issue detail page
-│   │   ├── IssueDetails.tsx     # Display component
-│   │   ├── EditIssueButton.tsx  # Navigation to edit
-│   │   ├── edit/
-│   │   │   └── page.tsx         # Edit issue page
-│   │   └── delete/
-│   │       └── DeleteIssueButton.tsx  # Delete with confirmation
-│   ├── _components/             # Shared issue components (underscore = not a route)
-│   │   ├── IssueForm.tsx        # Main form (client component)
-│   │   ├── IssueFormClient.tsx  # Client wrapper
-│   │   └── IssueFormSkeleton.tsx
-│   ├── new/
-│   │   └── page.tsx             # Create new issue
-│   ├── page.tsx                 # Issues list
-│   └── IssueActions.tsx
-├── auth/
-│   └── signup/
-│       ├── page.tsx             # Auth page with tabs
-│       └── _components/         # SignInTab, SignUpTab
-├── components/                  # Global reusable components
-├── lib/                         # Utilities and configs
-└── api/                         # API routes
-```
+- `app/issues/_components/IssueForm.tsx`: Create/edit form using Controller for markdown editor
+- `app/issues/_components/StatusSelect.tsx`: Dropdown to change issue status
+- `app/issues/[id]/AssigneeSelect.tsx`: User assignment dropdown (uses TanStack Query)
+- `app/issues/list/IssueStatusFilter.tsx`: Filter issues list by status
+- `app/components/IssueStatusBadge.tsx`: Visual badge for status display
 
 ### Path Aliases
 
-- `@/*` maps to root directory (configured in tsconfig.json)
-- Example: `@/prisma/client`, `@/app/validationSchema`, `@/generated/prisma/client`
+`@/*` maps to root directory. Examples:
+- `@/prisma/client` for Prisma instance
+- `@/generated/prisma/client` for generated types
+- `@/app/components` for shared components
 
 ## Key Implementation Details
 
 ### Client vs Server Components
 
-- **Client Components**: Forms, interactive UI (marked with `'use client'`)
-- **Server Components**: Default for pages, data fetching
-- Issue forms use Controller from react-hook-form to manage the markdown editor state
+- **Server Components**: Pages with data fetching (default)
+- **Client Components**: Forms, dropdowns, interactive UI (marked with `'use client'`)
+- Use `export const dynamic = 'force-dynamic'` for pages that need fresh data on each request
 
-### Issue Status Enum
+### Issue Assignment Flow
 
-The `Status` enum (OPEN, IN_PROGRESS, CLOSED) is defined in Prisma schema but currently commented out in the validation schema. When working with status:
-- Database supports it (prisma/schema.prisma:25-29)
-- Validation currently doesn't enforce it (app/validationSchema.ts:6)
-
-### Environment Variables
-
-Required in `.env`:
-- `DATABASE_PASSWORD`: MySQL root password
-- `DATABASE_URL`: Full MySQL connection string
-- `BETTER_AUTH_URL`: Base URL for auth (http://localhost:3000 in dev)
-- `BETTER_AUTH_SECRET`: Secret for auth (production)
-- Optional: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (for OAuth)
-
-### Prisma Client Generation
-
-After modifying `prisma/schema.prisma`, always run:
-```bash
-npx prisma generate
-```
-
-The client is generated to `generated/prisma/client` (not the default `node_modules/.prisma/client`).
+Issues can be assigned to users via `AssigneeSelect`:
+1. Component fetches users from `/api/users` using TanStack Query
+2. PATCH request to `/api/issues/[id]` with `assignedToUserId`
+3. Toast notification on success/error via Sonner
+4. `router.refresh()` to revalidate server components
 
 ### Router Usage
 
 - Use `useRouter` from `next/navigation` (not `next/router`)
 - After mutations, call `router.refresh()` to revalidate server components
-- Use `router.push()` for navigation
+
+### Environment Variables
+
+Required in `.env`:
+- `DATABASE_URL`: Full MySQL connection string
+- `BETTER_AUTH_URL`: Base URL (http://localhost:3000 in dev)
+- `BETTER_AUTH_SECRET`: Secret for auth
 
 ## Common Patterns
 
-### Creating a New Issue Feature
+### Adding a New Issue Field
 
-1. Add field to Prisma schema if needed
-2. Run `npx prisma migrate dev --name <description>`
-3. Update `app/validationSchema.ts` Zod schema
-4. Modify `IssueForm.tsx` to include new field
-5. Update API routes to handle new field
-6. Run `npx prisma generate` to update client types
+1. Add field to Prisma schema
+2. `npx prisma migrate dev --name <description>`
+3. Update `app/validationSchema.ts` (both create and patch schemas if applicable)
+4. Update `IssueForm.tsx` for UI
+5. Update API routes to handle the field
+6. `npx prisma generate` to update types
 
 ### Adding Authentication Guards
 
-Use BetterAuth's server-side `auth` instance from `app/lib/auth.ts`. Check session in server components or API routes before allowing operations.
+Use BetterAuth's `auth` from `app/lib/auth.ts` to check sessions in server components or API routes.
