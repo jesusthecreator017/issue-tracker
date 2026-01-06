@@ -1,6 +1,6 @@
 'use client'
 import { Select } from '@radix-ui/themes'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const statuses: { label: string, value: string }[] = [
     { label: 'All', value: 'ALL' },
@@ -11,6 +11,7 @@ const statuses: { label: string, value: string }[] = [
 
 const IssueStatusFilter = () => {
     const router = useRouter();
+    const searchParams = useSearchParams();
   return (
     <Select.Root
         onValueChange={(status) => {
