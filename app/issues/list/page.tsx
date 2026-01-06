@@ -1,13 +1,13 @@
 import { prisma } from '@/prisma/client'
 import { Status, Issue } from '@/generated/prisma/client'
-import { Table } from '@radix-ui/themes'
+import { Button, Table, Flex } from '@radix-ui/themes'
 import NextLink from 'next/link'
 import { IssueStatusBadge, Link } from '@/app/components';
 import IssueActions from './IssueActions'
-import { ArrowUpIcon } from '@radix-ui/react-icons';
+import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
 
 interface Props {
-  searchParams : { status?: string, orderBy: keyof Issue }
+  searchParams : { status?: string, orderBy?: keyof Issue, order?: 'asc' | 'desc' }
 }
 
 const IssuesPage = async ({ searchParams } : Props ) => {
@@ -19,12 +19,16 @@ const IssuesPage = async ({ searchParams } : Props ) => {
   ]
   
   const resolvedParams = await searchParams;
-  const { status, orderBy } = resolvedParams;
+  const { status, orderBy, order } = resolvedParams;
   const validStatuses = Object.values(Status);
   const statusFilter = validStatuses.includes(status as Status) ? status as Status : undefined;
+  const columnValues = columns.map(column => column.value);
+  const sortDirection = order === 'desc' ? 'desc' : 'asc';
+  const validOrderBy = columnValues.includes(orderBy as keyof Issue) ? { [orderBy as string]: sortDirection } : undefined;
 
   const issues = await prisma.issue.findMany({
-    where: { status: statusFilter }
+    where: { status: statusFilter },
+    orderBy: validOrderBy
   });
 
   return (
@@ -36,12 +40,15 @@ const IssuesPage = async ({ searchParams } : Props ) => {
             {
               columns.map( (column) => (
                 <Table.ColumnHeaderCell key={column.value} className={column.className} >
-                  <NextLink href={{
-                    query: { ...resolvedParams, orderBy: column.value }
-                  }}>
+                  <Flex gap='1' direction='row' align='center'>
                     {column.label}
-                  </NextLink>
-                  { column.value === orderBy && <ArrowUpIcon className='inline' /> }
+                    <NextLink href={{ query: { ...resolvedParams, orderBy: column.value, order: 'asc' } }}>
+                      <ArrowUpIcon className={orderBy === column.value && sortDirection === 'asc' ? 'text-amber-600' : 'text-gray-400'} />
+                    </NextLink>
+                    <NextLink href={{ query: { ...resolvedParams, orderBy: column.value, order: 'desc' } }}>
+                      <ArrowDownIcon className={orderBy === column.value && sortDirection === 'desc' ? 'text-cyan-600' : 'text-gray-400'} />
+                    </NextLink>
+                  </Flex>
                 </Table.ColumnHeaderCell>
               ))
             }
