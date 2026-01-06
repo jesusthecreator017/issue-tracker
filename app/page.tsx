@@ -1,4 +1,5 @@
 'use client';
+import Pagination from './components/Pagination';
 import { authClient } from './lib/auth-client';
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
         {!session && (
           <p className='text-gray-500'>Sign in to get started</p>
         )}
+        <Pagination itemCount={100} pageSize={10} currentPage={2}/>
       </div>
     </div>
   );
