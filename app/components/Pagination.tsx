@@ -23,14 +23,14 @@ const Pagination = ( { itemCount, pageSize, currentPage } : Props) => {
     }   
 
   return (
-    <Flex align='center' gap='2'>
-        <Text size='2'>Page {currentPage} of {pageCount}</Text>
+    <Flex align='center' gap='2' py='9'>
         <Button variant='soft' color='gray' disabled={currentPage === 1} onClick={ () => changePage(1)}>
             <DoubleArrowLeftIcon />
         </Button>
         <Button variant='soft' color='gray' disabled={currentPage === 1} onClick={ () => changePage(currentPage - 1)}>
             <ChevronLeftIcon />
         </Button>
+        <Text size='2'>Page {currentPage} of {pageCount}</Text>
         <Button variant='soft' color='gray' disabled={currentPage === pageCount} onClick={ () => changePage(currentPage + 1)}>
             <ChevronRightIcon />
         </Button>
