@@ -41,4 +41,4 @@ const Pagination = ( { itemCount, pageSize, currentPage } : Props) => {
   )
 }
 
-export default Pagination
+export default Pagination;
