@@ -23,7 +23,7 @@ const Pagination = ( { itemCount, pageSize, currentPage } : Props) => {
     }   
 
   return (
-    <Flex align='center' gap='2' py='9'>
+    <Flex align='center' gap='2'>
         <Button variant='soft' color='gray' disabled={currentPage === 1} onClick={ () => changePage(1)}>
             <DoubleArrowLeftIcon />
         </Button>

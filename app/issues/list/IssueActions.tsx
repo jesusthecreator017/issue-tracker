@@ -5,7 +5,7 @@ import IssueStatusFilter from './IssueStatusFilter'
 
 const IssueActions = () => {
     return (
-        <Flex mb='5' justify='between'>
+        <Flex justify='between'>
             <IssueStatusFilter />
             <Button>
                 <PlusCircledIcon height='16' width='16' />
