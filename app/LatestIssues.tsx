@@ -24,7 +24,7 @@ const LatestIssues = async () => {
                                 <Table.Row key={issue.id}>
                                     <Table.Cell>
                                         <Flex justify='between'>
-                                            <Flex direction='column' align='start'>
+                                            <Flex direction='column' align='start' gap='1'>
                                                 <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
                                                 <IssueStatusBadge status={issue.status}/>
                                             </Flex>
