@@ -64,6 +64,7 @@ npx prisma migrate reset                   # Reset database (WARNING: deletes al
 - **Forms**: react-hook-form with Zod resolver
 - **Data Fetching**: TanStack Query for client-side data fetching (e.g., AssigneeSelect)
 - **Notifications**: Sonner for toast notifications
+- **Security**: Arcjet (available in dependencies for rate limiting/bot protection)
 
 ### Key Components
 
@@ -104,9 +105,11 @@ Issues can be assigned to users via `AssigneeSelect`:
 ### Environment Variables
 
 Required in `.env`:
-- `DATABASE_URL`: Full MySQL connection string
+- `DATABASE_PASSWORD`: MariaDB password (connection configured in `prisma/client.ts`)
 - `BETTER_AUTH_URL`: Base URL (http://localhost:3000 in dev)
 - `BETTER_AUTH_SECRET`: Secret for auth
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`: For Google OAuth
+- `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`: For GitHub OAuth
 
 ## Common Patterns
 
@@ -122,3 +125,10 @@ Required in `.env`:
 ### Adding Authentication Guards
 
 Use BetterAuth's `auth` from `app/lib/auth.ts` to check sessions in server components or API routes.
+
+### Pagination Pattern
+
+Server-side pagination is implemented via URL search params:
+1. Page reads `page` param from `searchParams` and calculates `skip`/`take` for Prisma
+2. `Pagination` component (client) uses `useSearchParams` to update URL
+3. Example: `app/issues/list/page.tsx` shows filtering + sorting + pagination together
