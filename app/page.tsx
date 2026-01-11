@@ -16,8 +16,8 @@ export default async function Home() {
 
   return (
     <HomeClient>
-      <LatestIssues />
       <IssueSummary open={open} inProgress={inProgress} closed={closed}/>
+      <LatestIssues />
     </HomeClient>
   );
 }

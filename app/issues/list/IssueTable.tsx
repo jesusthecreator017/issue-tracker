@@ -17,9 +17,6 @@ interface Props {
 };
 
 const IssueTable = ({ searchParams, issues }: Props) => {
-    //const resSearchParams = await searchParams;
-    //const resIssues = await issues;
-
     const { orderBy, order } = searchParams;
     const sortDirection = order === 'desc' ? 'desc' : 'asc';
 
