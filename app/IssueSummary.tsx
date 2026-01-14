@@ -3,13 +3,6 @@ import { prisma } from '@/prisma/client';
 import { Card, Flex, Heading, Text } from '@radix-ui/themes'
 import Link from 'next/link';
 
-/*
-interface Props {
-    open: number,
-    inProgress: number, 
-    closed: number
-}
-*/
 
 const IssueSummary = async () => {
     const open = await prisma.issue.count({
