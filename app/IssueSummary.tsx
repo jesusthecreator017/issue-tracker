@@ -40,7 +40,7 @@ const IssueSummary = async () => {
                                 </Link>
                             </Text>
                         </Flex>
-                        <Text size='5' weight='bold' color={container.color}>
+                        <Text size='5' weight='medium' color={container.color}>
                             {container.value}
                         </Text>
                     </Card>
