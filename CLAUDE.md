@@ -66,6 +66,13 @@ npx prisma migrate reset                   # Reset database (WARNING: deletes al
 - **Notifications**: Sonner for toast notifications
 - **Security**: Arcjet (available in dependencies for rate limiting/bot protection)
 
+### Dashboard Components
+
+- `app/page.tsx`: Home page renders dashboard inside `HomeClient` wrapper
+- `app/IssueSummary.tsx`: Server component that fetches issue counts by status
+- `app/IssueChart.tsx`: Bar chart visualization using Recharts
+- `app/LatestIssues.tsx`: Shows most recent issues
+
 ### Key Components
 
 - `app/issues/_components/IssueForm.tsx`: Create/edit form using Controller for markdown editor
@@ -73,6 +80,12 @@ npx prisma migrate reset                   # Reset database (WARNING: deletes al
 - `app/issues/[id]/AssigneeSelect.tsx`: User assignment dropdown (uses TanStack Query)
 - `app/issues/list/IssueStatusFilter.tsx`: Filter issues list by status
 - `app/components/IssueStatusBadge.tsx`: Visual badge for status display
+
+### Loading States
+
+Next.js `loading.tsx` files provide automatic loading UI via Suspense. Located in:
+- `app/loading.tsx`, `app/issues/list/loading.tsx`, `app/issues/[id]/loading.tsx`, etc.
+- Use `react-loading-skeleton` for skeleton placeholders
 
 ### Path Aliases
 
@@ -125,6 +138,14 @@ Required in `.env`:
 ### Adding Authentication Guards
 
 Use BetterAuth's `auth` from `app/lib/auth.ts` to check sessions in server components or API routes.
+
+### Importing Prisma Types
+
+Import generated enums and types from the custom output location:
+```typescript
+import { Status } from '@/generated/prisma/enums'
+import { Issue, User } from '@/generated/prisma'
+```
 
 ### Pagination Pattern
 
