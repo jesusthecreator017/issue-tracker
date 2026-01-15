@@ -34,7 +34,7 @@ const IssueSummary = async () => {
                 containers.map( container => (
                     <Card key={container.label}>
                         <Flex direction='column' gap='1'>
-                            <Text size='2' weight='medium' asChild>
+                            <Text size='2' weight='bold' asChild>
                                 <Link href={`/issues/list?status=${container.status}`}>
                                     {container.label}
                                 </Link>
@@ -51,4 +51,4 @@ const IssueSummary = async () => {
   );
 }
 
-export default IssueSummary
+export default IssueSummary;
