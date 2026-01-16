@@ -1,60 +1,35 @@
 'use client';
-import { Flex, Text } from '@radix-ui/themes';
+import { Flex, Grid, Text } from '@radix-ui/themes';
 import { authClient } from './lib/auth-client';
 import { ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
 import UnloggedSession from './UnloggedSession';
 
 interface Props {
-    children: ReactNode;
+    leftContent: ReactNode;
+    rightContent: ReactNode;
 }
 
-const HomeClient = ({ children }: Props) => {
+const HomeClient = ({ leftContent, rightContent }: Props) => {
     const { data: session, isPending: loading } = authClient.useSession();
-    const router = useRouter();
-    /*
+
+    if (loading) {
+        return <Text>Loading</Text>;
+    }
+
+    if (!session) {
+        return <UnloggedSession />;
+    }
+
     return (
-        <div className='my-6 px-4 max-w-md mx-auto'>
-            <div className='text-center space-y-6'>
-                {loading ? (
-                    <p className='text-gray-500'>Loading...</p>
-                    //Add Skeleton Here
-                ) : (
-                    <>
-                        <h1 className='text-2xl font-bold'>
-                            {session ? `Hello, ${session.user?.name || 'User'}!` : 'Welcome to our App'}
-                        </h1>
-                        {session && children}
-                        {!session && (
-                            <p className='text-gray-500'>Sign in to get started</p>
-                        )}
-                    </>
-                )}
-            </div>
-        </div>
+        <Grid columns={{ initial: '1', md: '2' }} gap='5'>
+            <Flex direction='column' gap='3'>
+                {leftContent}
+            </Flex>
+            <Flex direction='column' gap='3'>
+                {rightContent}
+            </Flex>
+        </Grid>
     );
-    */
-
-    return (
-        <Flex direction='column' gap='3'>
-            {
-            loading ? (
-                // Add Skeleton Here
-                <Text>Loading</Text>
-            ) : (
-                // If there is a session render the children page
-                // If ther is NOT a session Let the user know that they are not signed in 
-                <>
-                    {session && children}
-                    {!session && (
-                        <UnloggedSession />
-                    )}
-                </>
-            )
-            }
-        </Flex>
-    )
-
 }
 
 export default HomeClient;

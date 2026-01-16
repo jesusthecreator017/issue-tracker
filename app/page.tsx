@@ -5,10 +5,14 @@ import LatestIssues from './LatestIssues';
 
 export default function Home() {
   return (
-    <HomeClient>
-      <IssueSummary />
-      <LatestIssues />
-      <IssueChartWrapper />
-    </HomeClient>
+    <HomeClient
+      leftContent={
+        <>
+          <IssueSummary />
+          <LatestIssues />
+        </>
+      }
+      rightContent={<IssueChartWrapper />}
+    />
   );
 }
