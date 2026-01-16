@@ -21,7 +21,7 @@ const HomeClient = ({ leftContent, rightContent }: Props) => {
     }
 
     return (
-        <Grid columns={{ initial: '1', md: '2' }} gap='5'>
+        <Grid columns={{ initial: '1', md: '2' }} gap='5' align='stretch'>
             <Flex direction='column' gap='3'>
                 {leftContent}
             </Flex>
