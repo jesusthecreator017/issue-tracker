@@ -40,7 +40,7 @@ const NavBar = () => {
 
             <Box>
                 {loading ? (
-                    <Skeleton width="32px" height="32px" style={{ borderRadius: '50%' }} />
+                    <Skeleton width="32px" height="32px" style={{ borderRadius: '40%' }} />
                 ) : session ? (
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
