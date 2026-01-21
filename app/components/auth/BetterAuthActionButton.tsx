@@ -23,9 +23,9 @@ export function BetterAuthActionButton({
 
     const handleClick = async () => {
         setIsLoading(true);
+        
         try {
             const { error } = await action();
-
             if (error) {
                 toast.error(errorMessage, {
                     description: error.message || "An error occurred",
