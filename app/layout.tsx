@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>
+      <body suppressHydrationWarning>
         <QueryClientProvider>
           <Theme appearance='dark' accentColor="jade">
             <Toaster position="bottom-right" theme="dark" richColors />
