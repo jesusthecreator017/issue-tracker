@@ -1,10 +1,12 @@
-import { Text } from '@radix-ui/themes'
+import { Text, Card } from '@radix-ui/themes'
 
 const UnloggedSession = () => {
   return (
-    <Text>
-        Please Log In!
-    </Text>
+    <Card>
+      <Text>
+          Please Log In!
+      </Text>
+    </Card>
   );
 }
 
